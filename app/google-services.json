@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "594405534136",
+    "project_id": "thread-yt",
+    "storage_bucket": "thread-yt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594405534136:android:36a27365555ac6f968474d",
+        "android_client_info": {
+          "package_name": "com.example.threadapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjjrRmLGKzmce9WKiKzq7tnmtpvlDQMtM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
