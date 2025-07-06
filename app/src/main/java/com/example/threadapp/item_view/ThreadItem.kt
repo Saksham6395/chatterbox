@@ -32,55 +32,55 @@ fun ThreadItem(thread: ThreadModel,
                userId:String) {
     Column {
         ConstraintLayout(modifier = Modifier.padding(16.dp)) {
-        val (userImage,title,username,time,image)=createRefs()
-        Image(painter = rememberAsyncImagePainter(model = users.imageUrl),
-            contentDescription = null,modifier = Modifier
-                .constrainAs(userImage) {
-                    top.linkTo(parent.top)
+            val (userImage,title,username,time,image)=createRefs()
+            Image(painter = rememberAsyncImagePainter(model = users.imageUrl),
+                contentDescription = null,modifier = Modifier
+                    .constrainAs(userImage) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
+                    .size(30.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop)
+
+            Text(text = users.username, style = TextStyle(fontSize = 20.sp), modifier = Modifier
+                .constrainAs(username) {
+                    top.linkTo(userImage.top)
+                    start.linkTo(userImage.end, margin = 5.dp)
+                }
+            )
+
+            Text(text = thread.timestamp,modifier = Modifier
+                .constrainAs(time) {
+                    top.linkTo(username.top)
+                    end.linkTo(parent.end, margin = 12.dp)
+                }
+                , fontWeight = FontWeight.ExtraBold,
+                style = TextStyle(fontSize = 7.sp),
+                maxLines = 2
+            )
+
+            Text(text = thread.thread,modifier = Modifier
+                .constrainAs(title) {
+                    top.linkTo(userImage.bottom)
                     start.linkTo(parent.start)
                 }
-                .size(30.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop)
-
-        Text(text = users.username, style = TextStyle(fontSize = 20.sp), modifier = Modifier
-            .constrainAs(username) {
-                top.linkTo(userImage.top)
-                start.linkTo(userImage.end, margin = 5.dp)
-            }
-        )
-
-        Text(text = thread.timestamp,modifier = Modifier
-            .constrainAs(time) {
-                top.linkTo(username.top)
-                end.linkTo(parent.end, margin = 12.dp)
-            }
-            , fontWeight = FontWeight.ExtraBold,
-            style = TextStyle(fontSize = 7.sp),
-            maxLines = 2
-        )
-
-        Text(text = thread.thread,modifier = Modifier
-            .constrainAs(title) {
-                top.linkTo(userImage.bottom)
-                start.linkTo(parent.start)
-            }
-            .fillMaxWidth()
-        )
-        if(thread.imageUrl!=""){
-        Card(modifier = Modifier
-            .constrainAs(image) {
-                top.linkTo(title.bottom,margin = 8.dp)
-                start.linkTo(title.start)
-            }) {
-        Image(painter = rememberAsyncImagePainter(model = thread.imageUrl),
-            contentDescription = null,modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
-            contentScale = ContentScale.Crop)
+            )
+            if(thread.imageUrl!=""){
+                Card(modifier = Modifier
+                    .constrainAs(image) {
+                        top.linkTo(title.bottom,margin = 8.dp)
+                        start.linkTo(title.start)
+                }) {
+                Image(painter = rememberAsyncImagePainter(model = thread.imageUrl),
+                    contentDescription = null,modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentScale = ContentScale.Crop)
+                }
+            }
         }
-    }
-}
         Divider(color = Color.Gray, thickness = 1.dp)
     }
 }

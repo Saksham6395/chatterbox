@@ -19,18 +19,27 @@ class AddThreadViewModel:ViewModel() {
     private val storageRef = Firebase.storage.reference
     private val _isPosted = MutableLiveData<Boolean>()
     val isPosted: LiveData<Boolean> get() = _isPosted
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> = _isLoading
 
     fun saveImage(
         userId: String,
         threads: String,
         imageUri: Uri
     ) {
+        _isLoading.value = true
         val imageRef = storageRef.child("threads/${UUID.randomUUID()}.jpg")
         val uploadTask = imageRef.putFile(imageUri)
         uploadTask.addOnSuccessListener {
             imageRef.downloadUrl.addOnSuccessListener {
                 saveData(userId, threads, it.toString())
+            }.addOnFailureListener {
+                _isLoading.value = false
+                _isPosted.value = false
             }
+        }.addOnFailureListener {
+            _isLoading.value = false
+            _isPosted.value = false
         }
     }
 
@@ -48,10 +57,14 @@ class AddThreadViewModel:ViewModel() {
         userRef.child(userRef.push().key!!).setValue(threadData)
             .addOnSuccessListener {
                 _isPosted.value = true
+                _isLoading.value = false
             }.addOnFailureListener {
                 _isPosted.value = false
+                _isLoading.value = false
             }
-
     }
 
+    fun resetPostState() {
+        _isPosted.value = false
+    }
 }

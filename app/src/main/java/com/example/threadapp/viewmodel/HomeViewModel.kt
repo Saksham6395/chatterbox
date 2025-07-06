@@ -1,5 +1,6 @@
 package com.example.threadapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,6 +26,9 @@ class HomeViewModel:ViewModel() {
     }
     private fun fetchThreadsAndUsers(onResult: (List<Pair<ThreadModel, UserModel>>) -> Unit) {
         threadRef.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("HomeViewModel", "Failed to fetch threads : ${error.message}")
+            }
             override fun onDataChange(snapshot: DataSnapshot) {
                 val result= mutableSetOf<Pair<ThreadModel, UserModel>>()
                 for (threadSnapshot in snapshot.children) {
@@ -41,23 +45,19 @@ class HomeViewModel:ViewModel() {
                     }
                 }
             }
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
         })
     }
     fun fetchUsersFromThread(thread: ThreadModel,onResult: (UserModel) -> Unit){
         db.getReference("users").child(thread.uid)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val user = snapshot.getValue(UserModel::class.java)
-                        user?.let(onResult)
-                    }
+        .addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(UserModel::class.java)
+                user?.let(onResult)
+            }
 
-                    override fun onCancelled(error: DatabaseError) {
-
-                    }
-                } )
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("HomeViewModel", "Failed to fetch threads : ${error.message}")
+            }
+        } )
     }
 }
