@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -21,12 +22,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.threadapp.Navigation.Routes
 import com.example.threadapp.model.BottomNavitem
+import com.example.threadapp.viewmodel.AuthState
 import com.example.threadapp.viewmodel.AuthViewModel
 
 @Composable
 fun BottomNav(navController: NavHostController,authViewModel: AuthViewModel){
     val navController1:NavHostController = rememberNavController()
-    Scaffold(bottomBar = {MyBottombar(navController1)}){innerPadding ->
+    Scaffold(bottomBar = {
+        MyBottombar(navController1,authViewModel)
+    }){
+        innerPadding ->
         NavHost(navController = navController1, startDestination = Routes.Home.routes,
             modifier = Modifier.padding(innerPadding)) {
             composable(Routes.Splash.routes){
@@ -61,8 +66,12 @@ fun BottomNav(navController: NavHostController,authViewModel: AuthViewModel){
 
 }
 @Composable
-fun MyBottombar(navController1: NavHostController) {
+fun MyBottombar(navController1: NavHostController,authViewModel: AuthViewModel) {
     val backStackEntry = navController1.currentBackStackEntryAsState()
+    val authState = authViewModel.authState.observeAsState()
+    if (authState.value is AuthState.Unauthenticated) {
+        return // bye-bye nav bar 👋
+    }
     val list =listOf(
         BottomNavitem(
             "home",

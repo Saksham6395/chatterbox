@@ -91,19 +91,10 @@ class AuthViewModel:ViewModel() {
         imageUri: Uri,
         context: Context
     ) {
-        val fireStored=Firebase.firestore
-        val documentId = UUID.randomUUID().toString()
-        val followersRef=fireStored.collection("followers").document(documentId)
-        val followingRef=fireStored.collection("following").document(documentId)
-
-        followingRef.set(mapOf("followingIds" to listOf<String>()))
-        followersRef.set(mapOf("followerIds" to listOf<String>()))
-
         _authState.value = AuthState.Loading
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _authState.value = AuthState.Authenticated
                     _firebaseUser.value=auth.currentUser
                     saveImage(name, email,password, username ,dob, imageUri, auth.currentUser?.uid,context)
                 } else {
@@ -140,6 +131,15 @@ class AuthViewModel:ViewModel() {
         uid: String?,
         context: Context
     ) {
+
+        val fireStored=Firebase.firestore
+        val documentId = uid!!
+        val followersRef=fireStored.collection("followers").document(documentId)
+        val followingRef=fireStored.collection("following").document(documentId)
+
+        followingRef.set(mapOf("followingIds" to listOf<String>()))
+        followersRef.set(mapOf("followerIds" to listOf<String>()))
+
         val userData = UserModel(name,email,password,username,dob,imageUrl,uid!!)
 
         userRef.child(uid).setValue(userData)
@@ -147,16 +147,20 @@ class AuthViewModel:ViewModel() {
                 if(imageUrl.isNotEmpty()){
                     sharedPref.storeData(name, email,password, username, dob, imageUrl, context)
                 }
+                checkAuthStatus()
+                _authState.value = AuthState.Authenticated
             }
             .addOnFailureListener {
+                _authState.value = AuthState.Unauthenticated
                 Log.e("FirebaseSave", "Failed to save user data: ${it.message}")
                 Toast.makeText(context, "Failed to save user info", Toast.LENGTH_SHORT).show()
             }
     }
 
-    fun signout(){
+    fun signout(context: Context){
         auth.signOut()
         _authState.value = AuthState.Unauthenticated
+        sharedPref.clear(context)
     }
 }
 
@@ -166,4 +170,3 @@ sealed class AuthState {
     data object Unauthenticated : AuthState()
     data class Error(val message: String) : AuthState()
 }
-//with

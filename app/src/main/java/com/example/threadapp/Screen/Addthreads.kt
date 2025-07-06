@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -59,6 +61,7 @@ fun AddThread(navController: NavController){
     var thread by remember { mutableStateOf("") }
     val threadViewModel: AddThreadViewModel = viewModel()
     val isPosted by threadViewModel.isPosted.observeAsState(false)
+    val isLoading by threadViewModel.isLoading.observeAsState(false)
     val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){
@@ -84,18 +87,15 @@ fun AddThread(navController: NavController){
             thread=""
             imageUri=null
             Toast.makeText(context,"Thread Posted", Toast.LENGTH_SHORT).show()
-            navController.navigate(Routes.Home.routes){
-                popUpTo(Routes.AddThread.routes){
-                    inclusive=true
-                }
-            }
+            threadViewModel.resetPostState()
         }
     }
-    ConstraintLayout(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)
-    ) {
-        val (crossPic, title, logo,content,name, editText,button,postButton) = createRefs()
+    Box(modifier = Modifier.fillMaxSize()) {
+        ConstraintLayout(modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+        ) {
+        val (crossPic, title,desc, logo,content,name, editText,button,postButton) = createRefs()
         Image(painter = painterResource(id = R.drawable.baseline_close_24),
             contentDescription = null,
             modifier = Modifier
@@ -138,34 +138,47 @@ fun AddThread(navController: NavController){
                 start.linkTo(logo.end,margin = 12.dp)
                 bottom.linkTo(logo.bottom)}
             , textAlign = TextAlign.Center)
-        BasicTextFieldWithHint(hint = "add a new thread", value = thread,
-            onValueChange = {thread=it}, modifier = Modifier
+        Box(
+            modifier = Modifier
                 .constrainAs(editText) {
                     top.linkTo(name.bottom, margin = 12.dp)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
                 .padding(0.dp, 4.dp, 4.dp, 4.dp)
-        )
+        ) {
+            if (thread.isEmpty()) {
+                Text(text = "add a new thread", color = Color.Gray)
+            }
+            BasicTextField(
+                value = thread,
+                onValueChange = { thread = it },
+                textStyle = TextStyle.Default.copy(color = Color.Black),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
         if(imageUri==null){
             Image(painter=painterResource(id = R.drawable.baseline_attach_file_24),contentDescription = null
                 , modifier = Modifier
-                    .constrainAs(content) {
-                        top.linkTo(editText.bottom, margin = 12.dp)
-                        start.linkTo(parent.start, margin = 10.dp)
+                .constrainAs(content) {
+                    top.linkTo(editText.bottom, margin = 12.dp)
+                    start.linkTo(parent.start, margin = 10.dp)
+                }
+                .clickable {
+                    val isGranted = ContextCompat.checkSelfPermission(
+                        context,
+                        permissionToRequest
+                    ) == PackageManager.PERMISSION_GRANTED
+                    if (isGranted) {
+                        launcher.launch("image/*")
+                    } else {
+                        permissionLauncher.launch(permissionToRequest)
                     }
-                    .clickable {
-                        val isGranted = ContextCompat.checkSelfPermission(
-                            context,
-                            permissionToRequest
-                        ) == PackageManager.PERMISSION_GRANTED
-                        if (isGranted) {
-                            launcher.launch("image/*")
-                        } else {
-                            permissionLauncher.launch(permissionToRequest)
-                        }
-                    })}
-        else{
+                }
+            )
+        }
+        else {
             Box(modifier = Modifier
                 .size(400.dp)
                 .background(color = Color.Gray)
@@ -179,46 +192,52 @@ fun AddThread(navController: NavController){
                 .padding(12.dp)
                 .height(250.dp)
                 .fillMaxWidth()
-            ){
-            Image(painter = rememberAsyncImagePainter(model = imageUri),
-            contentDescription = "Person", modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                contentScale = ContentScale.Crop)
-            Icon(imageVector = Icons.Default.Close,contentDescription = "Remove image",
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .clickable { imageUri = null })
-                }
-            Text(text = "anyone can reply",
-                modifier = Modifier.constrainAs(content){
-                    start.linkTo(parent.start)
-                    bottom.linkTo(parent.bottom)
-                })
-            TextButton(onClick = {
-                if(imageUri==null){
-                    threadViewModel.saveData(FirebaseAuth.getInstance().currentUser!!.uid,thread,"")
-                }else{
-                    threadViewModel.saveImage(FirebaseAuth.getInstance().currentUser!!.uid,thread,imageUri!!)
-                }
-            },
-                modifier = Modifier.constrainAs(postButton){
-                    top.linkTo(content.top)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(content.bottom)
-                }){
-                Text(text = "Post")
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(model = imageUri),
+                    contentDescription = "Person", modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    contentScale = ContentScale.Crop
+                )
+                Icon(imageVector = Icons.Default.Close, contentDescription = "Remove image",
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .clickable { imageUri = null })
             }
         }
-    }
-}
-@Composable
-fun BasicTextFieldWithHint(hint:String,value:String,onValueChange: (String) -> Unit, modifier: Modifier){
-    Box(modifier = modifier){
-        if(value.isEmpty()){
-            Text(text = hint,color = Color.Gray)
+        Text(text = "anyone can reply",
+            modifier = Modifier.constrainAs(desc){
+                start.linkTo(parent.start)
+                bottom.linkTo(parent.bottom)
+            }
+        )
+        TextButton(onClick = {
+            if(imageUri==null){
+                threadViewModel.saveData(FirebaseAuth.getInstance().currentUser!!.uid,thread,"")
+            }else{
+                threadViewModel.saveImage(FirebaseAuth.getInstance().currentUser!!.uid,thread,imageUri!!)
+            }
+        },
+            enabled = !isLoading,
+            modifier = Modifier.constrainAs(postButton){
+                top.linkTo(desc.top)
+                end.linkTo(parent.end)
+                bottom.linkTo(desc.bottom)
+            }){
+            Text(text = if (isLoading) "Posting..." else "Post")
         }
-        BasicTextField(value = value, onValueChange = onValueChange, textStyle = TextStyle.Default.copy(color = Color.Black),
-            modifier = modifier.fillMaxWidth())
+    }
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White.copy(alpha = 0.6f))
+                    .pointerInput(Unit) {},
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = Color.Black, strokeWidth = 3.dp)
+            }
+        }
     }
 }

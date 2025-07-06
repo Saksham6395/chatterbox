@@ -30,30 +30,31 @@ import com.example.threadapp.viewmodel.UserViewModel
 
 @Composable
 fun Search(navController: NavController){
- val userViewModel: UserViewModel = viewModel()
- var search by remember { mutableStateOf("") }
- val users by userViewModel.userList.observeAsState()
-  Column {
-   Text(text = "Search", fontSize = 24.sp,color = Color.Black,
-    fontWeight = FontWeight.ExtraBold,
-    modifier = Modifier.padding(16.dp,16.dp,16.dp,0.dp))
- OutlinedTextField(
-  value = search,
-  onValueChange = { search = it },
-  label = { Text("username") },
-  singleLine = true,
-  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-  modifier = Modifier.fillMaxWidth()
-   .padding(0.dp,0.dp,0.dp,10.dp),
-  leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) }
- )
-  LazyColumn {
-   if(!users.isNullOrEmpty()){
-   val filterItems=users?.filter { it.username.contains(search, ignoreCase = true) }
-   items(filterItems ?: emptyList()) { user ->
-    UserItem(user, navController)
-   }
-   }
-  }
-  }
+    val userViewModel: UserViewModel = viewModel()
+    var search by remember { mutableStateOf("") }
+    val users by userViewModel.userList.observeAsState()
+    Column {
+        Text(text = "Search", fontSize = 24.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.ExtraBold,
+            modifier = Modifier.padding(16.dp,16.dp,16.dp,0.dp))
+        OutlinedTextField(
+            value = search,
+            onValueChange = { search = it },
+            label = { Text("username") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            modifier = Modifier.fillMaxWidth()
+             .padding(0.dp,0.dp,0.dp,10.dp),
+            leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) }
+        )
+        LazyColumn {
+            if(!users.isNullOrEmpty()){
+               val filterItems=users?.filter { it.username.contains(search, ignoreCase = true) }
+               items(filterItems ?: emptyList()) { user ->
+                  UserItem(user, navController)
+               }
+            }
+        }
+    }
 }

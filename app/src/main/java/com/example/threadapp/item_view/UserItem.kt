@@ -34,35 +34,35 @@ fun UserItem(users:UserModel,navController: NavController) {
             val routes=Routes.OtherUsers.routes.replace("{data}",users.uid)
                 navController.navigate(routes)
         }) {
-        val (userImage,username,name)=createRefs()
-        Image(painter = rememberAsyncImagePainter(model = users.imageUrl),
-            contentDescription = null,modifier = Modifier
-                .constrainAs(userImage) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
+            val (userImage,username,name)=createRefs()
+            Image(painter = rememberAsyncImagePainter(model = users.imageUrl),
+                contentDescription = null,modifier = Modifier
+                    .constrainAs(userImage) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
+                    .size(30.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop)
+
+            Text(text = users.username, style = TextStyle(fontSize = 20.sp), modifier = Modifier
+                .constrainAs(username) {
+                    top.linkTo(userImage.top)
+                    start.linkTo(userImage.end, margin = 5.dp)
+                },
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 20.sp
+            )
+
+            Text(text = users.name,modifier = Modifier
+                .constrainAs(name) {
+                    top.linkTo(username.bottom)
+                    start.linkTo(userImage.end, margin = 5.dp)
                 }
-                .size(30.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop)
-
-        Text(text = users.username, style = TextStyle(fontSize = 20.sp), modifier = Modifier
-            .constrainAs(username) {
-                top.linkTo(userImage.top)
-                start.linkTo(userImage.end, margin = 5.dp)
-            },
-            fontWeight = FontWeight.ExtraBold,
-            fontSize = 20.sp
-        )
-
-        Text(text = users.name,modifier = Modifier
-            .constrainAs(name) {
-                top.linkTo(username.bottom)
-                start.linkTo(userImage.end, margin = 5.dp)
-            }
-            , fontWeight = FontWeight.ExtraBold,
-            style = TextStyle(fontSize = 10.sp),
-            maxLines = 2
-        )
+                , fontWeight = FontWeight.ExtraBold,
+                style = TextStyle(fontSize = 10.sp),
+                maxLines = 2
+            )
         }
         Divider(color = Color.Gray, thickness = 1.dp,
             modifier = Modifier.padding(bottom = 5.dp, top = 5.dp))

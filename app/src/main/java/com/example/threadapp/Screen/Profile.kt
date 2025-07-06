@@ -1,5 +1,6 @@
 package com.example.threadapp.Screen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,7 +31,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.threadapp.item_view.ThreadItem
 import com.example.threadapp.model.UserModel
 import com.example.threadapp.utils.sharedPref
-import com.example.threadapp.viewmodel.AuthState
 import com.example.threadapp.viewmodel.AuthViewModel
 import com.example.threadapp.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -38,9 +38,24 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun Profile(navController: NavController, authViewModel: AuthViewModel){
     val authState=authViewModel.authState.observeAsState()
+
     val context = LocalContext.current
+
     val profileViewModel: ProfileViewModel = viewModel()
+
     val threads by profileViewModel.thread.observeAsState()
+
+    val isLoading by profileViewModel.followActionLoading.observeAsState(false)
+
+
+    val followerCount by profileViewModel.followerCount.observeAsState(0)
+
+    val followingCount by profileViewModel.followingCount.observeAsState(0)
+
+
+    val currentUser = FirebaseAuth.getInstance().currentUser ?: return
+    val uid = currentUser.uid
+
     val user=UserModel(
         name = sharedPref.getName(context),
         username = sharedPref.getUserName(context),
@@ -49,14 +64,24 @@ fun Profile(navController: NavController, authViewModel: AuthViewModel){
         dob = sharedPref.getDob(context),
         password = sharedPref.getPassword(context)
     )
-    if(FirebaseAuth.getInstance().currentUser!=null){
-    profileViewModel.fetchThreads(FirebaseAuth.getInstance().currentUser!!.uid)}
-    LaunchedEffect(authState.value){
-        when(authState.value){
-            is AuthState.Unauthenticated ->navController.navigate("login")
-            else -> Unit
-        }
+    LaunchedEffect(uid) {
+        profileViewModel.fetchThreads(uid)
     }
+    LaunchedEffect(authState.value) {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            navController.navigate("login") {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+            return@LaunchedEffect
+        }
+        profileViewModel.getFollowerCount(uid)
+        profileViewModel.getFollowingCount(uid)
+    }
+
     LazyColumn {
        item {
            ConstraintLayout(modifier = Modifier.padding(16.dp)) {
@@ -68,7 +93,7 @@ fun Profile(navController: NavController, authViewModel: AuthViewModel){
                    follower,
                    following
                ) = createRefs()
-               Image(painter = rememberAsyncImagePainter(model = sharedPref.getImage(context)),
+               Image(painter = rememberAsyncImagePainter(model = user.imageUrl),
                    contentDescription = null, modifier = Modifier
                        .constrainAs(userImage) {
                            top.linkTo(parent.top)
@@ -77,7 +102,7 @@ fun Profile(navController: NavController, authViewModel: AuthViewModel){
                        .size(100.dp)
                        .clip(CircleShape),
                    contentScale = ContentScale.Crop)
-               Text(text = sharedPref.getName(context),
+               Text(text = user.name,
                    style = TextStyle(fontSize = 24.sp),
                    fontWeight = FontWeight.ExtraBold,
                    modifier = Modifier
@@ -87,7 +112,7 @@ fun Profile(navController: NavController, authViewModel: AuthViewModel){
                        }
                        .fillMaxWidth()
                )
-               Text(text = sharedPref.getUserName(context),
+               Text(text = user.username,
                    style = TextStyle(fontSize = 20.sp),
                    modifier = Modifier
                        .constrainAs(username) {
@@ -95,20 +120,28 @@ fun Profile(navController: NavController, authViewModel: AuthViewModel){
                            start.linkTo(parent.start)
                        }
                )
-               Text(text = "0  Followers", style = TextStyle(fontSize = 20.sp), modifier = Modifier
+               Text(text = "$followerCount Followers", style = TextStyle(fontSize = 20.sp), modifier = Modifier
                    .constrainAs(follower) {
                        top.linkTo(username.bottom)
                        start.linkTo(parent.start)
                    }
                )
-               Text(text = "0 Following", style = TextStyle(fontSize = 20.sp), modifier = Modifier
+               Text(text = "$followingCount Following", style = TextStyle(fontSize = 20.sp), modifier = Modifier
                    .constrainAs(following) {
                        top.linkTo(follower.bottom)
                        start.linkTo(parent.start)
                    }
                )
                ElevatedButton(
-                   onClick = { authViewModel.signout() },
+                   onClick = { authViewModel.signout(context)
+                       Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT).show()
+                       navController.navigate("login") {
+                           popUpTo(navController.graph.startDestinationId) {
+                               inclusive = true
+                           }
+                           launchSingleTop = true
+                       }
+                   },
                    modifier = Modifier.constrainAs(logout) {
                        top.linkTo(following.bottom)
                        start.linkTo(parent.start)

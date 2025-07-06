@@ -10,7 +10,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class HomeViewModel:ViewModel() {
@@ -39,7 +40,11 @@ class HomeViewModel:ViewModel() {
                             result.add(Pair(it,user))
 
                             if(result.size==snapshot.childrenCount.toInt()){
-                             onResult(result.toList())
+                                val sortedResult = result.toList().sortedByDescending { pair ->
+                                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd\n HH:mm:ss")
+                                    LocalDateTime.parse(pair.first.timestamp, formatter)
+                                }
+                                onResult(sortedResult)
                             }
                         }
                     }

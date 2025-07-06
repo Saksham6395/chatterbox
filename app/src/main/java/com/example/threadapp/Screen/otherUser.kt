@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
@@ -37,19 +38,40 @@ import com.example.threadapp.utils.sharedPref
 import com.example.threadapp.viewmodel.AuthState
 import com.example.threadapp.viewmodel.AuthViewModel
 import com.example.threadapp.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun OtherUserProfile(navController: NavHostController, authViewModel: AuthViewModel, uid: String?){
     val authState=authViewModel.authState.observeAsState()
+
     val context = LocalContext.current
+
     val profileViewModel: ProfileViewModel = viewModel()
+
     val threads by profileViewModel.thread.observeAsState()
+
     val users by profileViewModel.users.observeAsState()
+
+    val isFollowing by profileViewModel.isFollowing.observeAsState(false)
+
+    val isLoading by profileViewModel.followActionLoading.observeAsState(false)
+
+    val currentUid = FirebaseAuth.getInstance().currentUser?.uid
+
+    val followerCount by profileViewModel.followerCount.observeAsState(0)
+
+    val followingCount by profileViewModel.followingCount.observeAsState(0)
+
     LaunchedEffect(uid) {
         try {
             uid?.let {
                 profileViewModel.fetchThreads(it)
                 profileViewModel.fetchUsers(it)
+                if (currentUid != null) {
+                    profileViewModel.checkIfFollowing(currentUid, it)
+                }
+                profileViewModel.getFollowerCount(uid)
+                profileViewModel.getFollowingCount(uid)
             } ?: throw IllegalArgumentException("User ID is null")
         } catch (e: Exception) {
             println("Error fetching data: ${e.localizedMessage}")
@@ -61,13 +83,18 @@ fun OtherUserProfile(navController: NavHostController, authViewModel: AuthViewMo
             else -> Unit
         }
     }
-    LazyColumn(modifier = Modifier.fillMaxWidth().padding(
-        WindowInsets.safeContent
-            .only(WindowInsetsSides.Top + WindowInsetsSides.Bottom)
-            .asPaddingValues())) {
+    LazyColumn(modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+            WindowInsets.safeContent
+                .only(WindowInsetsSides.Top + WindowInsetsSides.Bottom)
+                .asPaddingValues()
+        )) {
        item{
            if (users != null) {
-           ConstraintLayout(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+           ConstraintLayout(modifier = Modifier
+               .fillMaxWidth()
+               .padding(16.dp)) {
                val (
                    userImage,
                    username,
@@ -103,27 +130,49 @@ fun OtherUserProfile(navController: NavHostController, authViewModel: AuthViewMo
                            start.linkTo(parent.start)
                        }
                )
-               Text(text = "0  Followers", style = TextStyle(fontSize = 20.sp), modifier = Modifier
+               Text(text = "$followerCount Followers", style = TextStyle(fontSize = 20.sp), modifier = Modifier
                    .constrainAs(follower) {
                        top.linkTo(username.bottom)
                        start.linkTo(parent.start)
                    }
                )
-               Text(text = "0 Following", style = TextStyle(fontSize = 20.sp), modifier = Modifier
+               Text(text = "$followingCount Following", style = TextStyle(fontSize = 20.sp), modifier = Modifier
                    .constrainAs(following) {
                        top.linkTo(follower.bottom)
                        start.linkTo(parent.start)
                    }
                )
-               ElevatedButton(
-                   onClick = {  },
-                   modifier = Modifier.constrainAs(logout) {
-                       top.linkTo(following.bottom)
-                       start.linkTo(parent.start)
-                   }) {
-                   Text(text = "Follow")
+               if(currentUid!=null){
+                   ElevatedButton(
+                       onClick = {
+                           if (!isLoading && uid != null && currentUid != uid) {
+                               if (isFollowing) {
+                                   profileViewModel.unfollowUser(currentUid, uid)
+                               } else {
+                                   profileViewModel.followUser(currentUid, uid)
+                               }
+                           }
+                       },
+                       enabled = !isLoading,
+                       modifier = Modifier.constrainAs(logout) {
+                           top.linkTo(following.bottom)
+                           start.linkTo(parent.start)
+                       }) {
+                       if (isLoading) {
+                           CircularProgressIndicator(
+                               color = Color.White,
+                               strokeWidth = 2.dp,
+                               modifier = Modifier.size(20.dp)
+                           )
+                       } else if (currentUid == uid) {
+                           Text(text = "It's You")
+                       } else if (isFollowing) {
+                           Text(text = "Unfollow")
+                       } else {
+                           Text(text = "Follow")
+                       }
+                   }
                }
-
            }
        }
        }

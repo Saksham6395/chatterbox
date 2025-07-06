@@ -214,19 +214,18 @@ fun register(navController: NavHostController,authViewModel: AuthViewModel){
                 contentAlignment = Alignment.Center
             ) {
                 OutlinedTextField(
-                    value = selectedDate,
-                    onValueChange = {},
-                    label = { Text("Enter Your D.O.B") },
+                    value = dob,
+                    onValueChange = {dob=it},
+                    label = { Text("Enter Your D.O.B i.e., DD/MM/YYYY") },
                     singleLine = true,
-                    readOnly = true,
                     trailingIcon = {
                         IconButton(onClick = { showDatePicker = true }) {
                             Icon(Icons.Default.DateRange, contentDescription = "Select date")
                         }
                     },
-                    modifier = Modifier
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                            modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { showDatePicker = true }
                 )
 
                 if (showDatePicker) {
@@ -314,7 +313,11 @@ fun register(navController: NavHostController,authViewModel: AuthViewModel){
                     ) {
                         Toast.makeText(context, "Please enter valid details", Toast.LENGTH_SHORT)
                             .show()
-                    } else {
+                    }
+                    else if(!isValidDobFormat(dob)){
+                        Toast.makeText(context, "Please enter valid dob", Toast.LENGTH_SHORT)
+                    }
+                    else {
                         authViewModel.register(
                             name,
                             email,
@@ -357,11 +360,24 @@ fun register(navController: NavHostController,authViewModel: AuthViewModel){
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black.copy(alpha = 0.5f))
-                    .pointerInput(Unit) {}, // Blocks interaction below
+                    .pointerInput(Unit) {},
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(color = Color.White)
             }
         }
+    }
+}
+fun isValidDobFormat(dob: String): Boolean {
+    val regex = Regex("^\\d{2}/\\d{2}/\\d{4}$")
+    if (!regex.matches(dob)) return false
+
+    return try {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        sdf.isLenient = false
+        sdf.parse(dob)
+        true
+    } catch (e: Exception) {
+        false
     }
 }

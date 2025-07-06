@@ -17,11 +17,9 @@ class UserViewModel:ViewModel() {
     var userList: LiveData<List<UserModel>> = _users
 
     init {
-        fetchUser {
-            _users.value=it
-        }
+        fetchUser()
     }
-    private fun fetchUser(onResult: (List< UserModel>) -> Unit) {
+    private fun fetchUser() {
         userRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val result= mutableSetOf<UserModel>()
@@ -31,15 +29,11 @@ class UserViewModel:ViewModel() {
                             result.add(it!!)
                     }
                 }
-                if(result.size==snapshot.childrenCount.toInt()){
-                    onResult(result.toList())
-                }
+                _users.value=result.toList()
             }
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                _users.value = emptyList()
             }
-
         })
     }
-
 }
