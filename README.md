@@ -5,6 +5,20 @@ A full-stack Threads-like **social media app** built with **Jetpack Compose** an
 
 ---
 
+## 📲 How to Try the App
+
+I've uploaded a `.zip` file containing the latest APK of the app. You can try it out directly on your Android phone:
+
+1. **Download** the ZIP file from [Google Drive]([https://drive.google.com/your-link-here](http://drive.google.com/drive/folders/1jvw8ad8GltC672m2csMUoNpkePtmP3Jp)) 📦
+2. **Extract** it to get the file: `app-debug.apk`
+3. On your phone, **enable installation from unknown sources** (Settings > Privacy or Security)
+4. **Install the APK**
+5. Open the app, and **register or log in** — your choice 🎉
+6. Enjoy scrolling, searching, posting, and following! 🔥
+
+---
+
+
 ## 📁 Table of Contents
 
 - [About the Project](#🧠-about-the-project)  
