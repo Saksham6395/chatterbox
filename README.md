@@ -7,7 +7,7 @@ A full-stack Threads-like **social media app** built with **Jetpack Compose** an
 
 ## 📲 How to Try the App
 
-I've uploaded a `.zip` file containing the latest APK of the app. You can try it out directly on your Android phone:
+Want to give it a spin? Just follow these steps:
 
 1. **Download** the ZIP file from [Google Drive](http://drive.google.com/drive/folders/1jvw8ad8GltC672m2csMUoNpkePtmP3Jp)📦
 2. **Extract** it to get the file: `app-debug.apk`
@@ -32,7 +32,9 @@ I've uploaded a `.zip` file containing the latest APK of the app. You can try it
 
 ## 🧠 About the Project
 
-This app replicates key functionality from Instagram Threads, with full Firebase integration:
+ChatterBox is a modern social media app that brings a clean and minimalist experience for sharing thoughts in the form of short threads.
+
+Core functionalities include:
 
 - Register & login users using Firebase Auth  
 - Add threads with text and image  
