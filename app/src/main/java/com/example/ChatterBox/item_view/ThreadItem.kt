@@ -31,7 +31,7 @@ fun ThreadItem(thread: ThreadModel,
                users:UserModel,
                navController: NavController,
                userId:String,
-               fromProfileScreen: Boolean = false) {
+               tonavigate: Boolean = false) {
     Column {
         ConstraintLayout(modifier = Modifier.padding(16.dp)) {
             val (userImage,title,username,time,image)=createRefs()
@@ -43,7 +43,7 @@ fun ThreadItem(thread: ThreadModel,
                     }
                     .size(30.dp)
                     .clip(CircleShape)
-                    .clickable(enabled = thread.uid != null && thread.uid.isNotEmpty() && !fromProfileScreen) {
+                    .clickable(enabled = thread.uid != null && thread.uid.isNotEmpty() && tonavigate ) {
                         thread.uid?.let {
                             navController.navigate("other_users/$it")
                         }

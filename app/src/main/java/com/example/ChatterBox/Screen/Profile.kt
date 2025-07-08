@@ -162,7 +162,7 @@ fun Profile(navController: NavController, authViewModel: AuthViewModel){
                 users = user,
                 navController,
                 sharedPref.getUserName(context),
-                true
+                false
             )
         }
     }

@@ -37,7 +37,7 @@ fun Home(navController: NavController) {
                     users = pairs.second,
                     navController,
                     FirebaseAuth.getInstance().currentUser!!.uid,
-                    false
+                    true
                 )
             }
         }
