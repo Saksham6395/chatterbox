@@ -5,11 +5,6 @@ A full-stack Threads-like **social media app** built with **Jetpack Compose** an
 
 ---
 
-## 📸 Live Preview  
-**Coming soon** — [APK / Hugging Face / YouTube Demo]
-
----
-
 ## 📁 Table of Contents
 
 - [About the Project](#🧠-about-the-project)  
@@ -17,8 +12,6 @@ A full-stack Threads-like **social media app** built with **Jetpack Compose** an
 - [Tech Stack](#🛠️-tech-stack)  
 - [Setup Guide](#🚀-setup-guide)  
 - [App Structure](#📂-app-structure)  
-- [Deployment](#🌐-deployment)  
-- [License](#📝-license)  
 - [Author](#🙌-author)
 
 ---
@@ -105,8 +98,10 @@ com.example.threadapp/
 │   ├── Addthreads.kt
 │   ├── BottomNav.kt
 │   ├── HomeScreen.kt
-│   ├── login.kt / register.kt
-│   ├── Profile.kt / otherUser.kt
+│   ├── login.kt
+│   ├── register.kt
+│   ├── otherUser.kt
+│   ├── Profile.kt
 │   ├── Notification.kt
 │   ├── Search.kt
 │   └── Splash.kt
@@ -125,22 +120,6 @@ com.example.threadapp/
 
 ---
 
-## 🌐 Deployment
-
-You can:
-
-- Build the APK from Android Studio  
-- Upload to Google Drive or Firebase App Distribution  
-- Share the download link  
-- (Optional) Record a demo video and upload to YouTube or Hugging Face Spaces  
-
----
-
-## 📝 License
-
-**MIT License** — free to use, modify, and distribute.
-
----
 
 ## 🙌 Author
 
@@ -148,4 +127,4 @@ You can:
 📍 ECE B.Tech @ SVNIT  
 ⚔️ Competitive Programmer | 📱 Android Developer | 🤖 ML Enthusiast  
 
-[GitHub](https://github.com/Saksham6395) | [LinkedIn](https://linkedin.com/in/your-profile)
+[GitHub](https://github.com/Saksham6395) | [LinkedIn](www.linkedin.com/in/saksham-samarth)
