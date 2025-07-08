@@ -1,5 +1,5 @@
 
-# 🧵 Thread App Clone
+# 🧵 CHATTERBOX
 
 A full-stack Threads-like **social media app** built with **Jetpack Compose** and **Firebase**. Users can register, login, post threads with images, follow/unfollow others, and receive real-time notifications. The app also includes a filtered search system and personalized profiles.
 
