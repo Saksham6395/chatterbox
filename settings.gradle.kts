@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "thread app"
+rootProject.name = "ChatterBox"
 include(":app")
