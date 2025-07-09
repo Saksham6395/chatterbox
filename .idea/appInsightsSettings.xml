@@ -18,10 +18,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.ChatterBox" />
+                  <option name="mobileSdkAppId" value="1:594405534136:android:36a27365555ac6f968474d" />
+                  <option name="projectId" value="thread-yt" />
+                  <option name="projectNumber" value="594405534136" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
