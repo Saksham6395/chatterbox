@@ -1,5 +1,6 @@
 package com.example.ChatterBox.Screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -103,15 +104,26 @@ fun OtherUserProfile(navController: NavHostController, authViewModel: AuthViewMo
                    follower,
                    following
                ) = createRefs()
-               Image(painter = rememberAsyncImagePainter(model = users!!.imageUrl),
-                   contentDescription = null, modifier = Modifier
-                       .constrainAs(userImage) {
-                           top.linkTo(parent.top)
-                           end.linkTo(parent.end)
-                       }
-                       .size(120.dp)
-                       .clip(CircleShape),
-                   contentScale = ContentScale.Crop)
+
+               val currentUser = users
+               if (currentUser != null && currentUser.imageUrl != null) {
+                   Log.d("ProfileImageDebug", "users: $currentUser")
+                   Log.d("ProfileImageDebug", "users.imageUrl: ${currentUser.imageUrl}")
+                   val secureImageUrl = currentUser.imageUrl.replace("http://", "https://")
+
+                   Image(
+                       painter = rememberAsyncImagePainter(model = secureImageUrl),
+                       contentDescription = null,
+                       modifier = Modifier
+                           .constrainAs(userImage) {
+                               top.linkTo(parent.top)
+                               end.linkTo(parent.end)
+                           }
+                           .size(120.dp)
+                           .clip(CircleShape),
+                       contentScale = ContentScale.Crop
+                   )
+               }
                Text(text = users!!.name,
                    style = TextStyle(fontSize = 24.sp),
                    fontWeight = FontWeight.ExtraBold,

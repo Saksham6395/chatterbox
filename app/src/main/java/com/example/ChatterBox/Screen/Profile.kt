@@ -93,7 +93,8 @@ fun Profile(navController: NavController, authViewModel: AuthViewModel){
                    follower,
                    following
                ) = createRefs()
-               Image(painter = rememberAsyncImagePainter(model = user.imageUrl),
+               val secureImageUrl = user.imageUrl.replace("http://", "https://")
+               Image(painter = rememberAsyncImagePainter(model = secureImageUrl),
                    contentDescription = null, modifier = Modifier
                        .constrainAs(userImage) {
                            top.linkTo(parent.top)

@@ -34,8 +34,9 @@ fun UserItem(users:UserModel,navController: NavController) {
             val routes=Routes.OtherUsers.routes.replace("{data}",users.uid)
                 navController.navigate(routes)
         }) {
+            val secureUrl = users.imageUrl.replace("http://", "https://")
             val (userImage,username,name)=createRefs()
-            Image(painter = rememberAsyncImagePainter(model = users.imageUrl),
+            Image(painter = rememberAsyncImagePainter(model = secureUrl),
                 contentDescription = null,modifier = Modifier
                     .constrainAs(userImage) {
                         top.linkTo(parent.top)

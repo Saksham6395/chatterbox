@@ -36,7 +36,7 @@ class HomeViewModel:ViewModel() {
                     val thread = threadSnapshot.getValue(ThreadModel::class.java)
                     thread.let {
                         fetchUsersFromThread(it!!){
-                            user->
+                                user->
                             result.add(Pair(it,user))
 
                             if(result.size==snapshot.childrenCount.toInt()){
@@ -54,15 +54,15 @@ class HomeViewModel:ViewModel() {
     }
     fun fetchUsersFromThread(thread: ThreadModel,onResult: (UserModel) -> Unit){
         db.getReference("users").child(thread.uid)
-        .addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val user = snapshot.getValue(UserModel::class.java)
-                user?.let(onResult)
-            }
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user = snapshot.getValue(UserModel::class.java)
+                    user?.let(onResult)
+                }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("HomeViewModel", "Failed to fetch threads : ${error.message}")
-            }
-        } )
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("HomeViewModel", "Failed to fetch threads : ${error.message}")
+                }
+            } )
     }
 }

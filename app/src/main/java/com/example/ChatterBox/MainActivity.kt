@@ -10,16 +10,25 @@ import com.example.ChatterBox.Navigation.NavGraph
 import com.example.ChatterBox.ui.theme.ThreadAppTheme
 import com.example.ChatterBox.viewmodel.AuthViewModel
 import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        FirebaseApp.initializeApp(this)
+
+        val appCheck = FirebaseAppCheck.getInstance()
+        appCheck.installAppCheckProviderFactory(
+            SafetyNetAppCheckProviderFactory.getInstance()
+        )
         enableEdgeToEdge()
+
         setContent {
             ThreadAppTheme {
-                FirebaseApp.initializeApp(this)
-                val navController= rememberNavController()
-                val authViewModel:AuthViewModel by viewModels()
+                val navController = rememberNavController()
+                val authViewModel: AuthViewModel by viewModels()
                 NavGraph(navController = navController, authViewModel = authViewModel)
             }
         }

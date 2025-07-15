@@ -1,5 +1,6 @@
 package com.example.ChatterBox.Screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -30,6 +31,7 @@ fun Home(navController: NavController) {
             modifier = Modifier.align(Alignment.CenterHorizontally)
                 .size(50.dp)
                 .padding(10.dp))
+        Log.d("HomeScreen", "Received ${threadandUser?.size ?: 0} threads from ViewModel")
         LazyColumn {
             items(threadandUser ?: emptyList()) { pairs ->
                 ThreadItem(

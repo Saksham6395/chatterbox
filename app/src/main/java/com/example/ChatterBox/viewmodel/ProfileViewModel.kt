@@ -7,13 +7,15 @@ import androidx.lifecycle.ViewModel
 import com.example.ChatterBox.model.NotificationModel
 import com.example.ChatterBox.model.ThreadModel
 import com.example.ChatterBox.model.UserModel
+import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.firestore
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class ProfileViewModel:ViewModel() {
@@ -66,7 +68,11 @@ class ProfileViewModel:ViewModel() {
                 val threadList= snapshot.children.mapNotNull{
                     it.getValue(ThreadModel::class.java)
                 }
-                _thread.postValue(threadList)
+                val sortedResult = threadList.sortedByDescending { pair ->
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd\n HH:mm:ss")
+                    LocalDateTime.parse(pair.timestamp, formatter)
+                }
+                _thread.postValue(sortedResult)
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.e("ProfileViewModel", "Failed to fetch threads: ${error.message}")

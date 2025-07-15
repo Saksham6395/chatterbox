@@ -120,7 +120,9 @@ fun AddThread(navController: NavController){
                     bottom.linkTo(crossPic.bottom) }
                 ,
             textAlign = TextAlign.Center)
-        Image(painter = rememberAsyncImagePainter(model = sharedPref.getImage(context)),
+        val rawUrl = sharedPref.getImage(context)
+        val secureUrl = rawUrl?.replace("http://", "https://")
+        Image(painter = rememberAsyncImagePainter(model = secureUrl),
             contentDescription = null,
             modifier = Modifier
                 .constrainAs(logo) {
@@ -216,7 +218,12 @@ fun AddThread(navController: NavController){
             if(imageUri==null){
                 threadViewModel.saveData(FirebaseAuth.getInstance().currentUser!!.uid,thread,"")
             }else{
-                threadViewModel.saveImage(FirebaseAuth.getInstance().currentUser!!.uid,thread,imageUri!!)
+                threadViewModel.uploadAndPostThread(
+                    imageUri = imageUri!!,
+                    context = context,
+                    userId = FirebaseAuth.getInstance().currentUser?.uid ?: "",
+                    threadText = thread
+                )
             }
         },
             enabled = !isLoading,

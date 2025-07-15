@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "594405534136",
-    "project_id": "thread-yt",
-    "storage_bucket": "thread-yt.appspot.com"
+    "project_number": "219546993672",
+    "firebase_url": "https://chatterbox-b2df7-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "chatterbox-b2df7",
+    "storage_bucket": "chatterbox-b2df7.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:594405534136:android:36a27365555ac6f968474d",
+        "mobilesdk_app_id": "1:219546993672:android:7dff7255b48b1feb72bdbd",
         "android_client_info": {
           "package_name": "com.example.ChatterBox"
         }
@@ -15,7 +16,26 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCjjrRmLGKzmce9WKiKzq7tnmtpvlDQMtM"
+          "current_key": "AIzaSyDyVQv5ymZ90iAoAb9MuyiYt9YdJJK46Lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219546993672:android:4a265827f2e143d172bdbd",
+        "android_client_info": {
+          "package_name": "com.example.chatterbox"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyVQv5ymZ90iAoAb9MuyiYt9YdJJK46Lc"
         }
       ],
       "services": {
