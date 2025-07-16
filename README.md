@@ -9,7 +9,7 @@ A full-stack Threads-like **social media app** built with **Jetpack Compose** an
 
 Want to give it a spin? Just follow these steps:
 
-- [Download the ZIP](https://github.com/Saksham6395/chatterbox/raw/main/app-debug.apk.zip)  from GitHub Releases then right-click the “Download” button on the top right and select “Save link as...” 📦
+- [Download the ZIP](https://github.com/Saksham6395/chatterbox/raw/main/app-debug.apk.zip)  from GitHub Releases select “Save link as...” 📦
 
 - Extract it to get: app-debug.apk
 
