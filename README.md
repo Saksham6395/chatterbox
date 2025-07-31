@@ -1,7 +1,7 @@
 
 # 🧵 CHATTERBOX
 
-A full-stack Threads-like **social media app** built with **Jetpack Compose** and **Firebase**. Users can register, login, post threads with images, follow/unfollow others, and receive real-time notifications. The app also includes a filtered search system and personalized profiles.
+**A full-stack Threads-like **social media app** built with **Jetpack Compose** and **Firebase**. Users can register, login, post threads with images, follow/unfollow others, and receive real-time notifications. The app also includes a filtered search system and personalized profiles.**
 
 ---
 
@@ -44,7 +44,7 @@ Enjoy smooth file compression! 🔥
 ChatterBox is a modern social media app that brings a clean and minimalist experience for sharing thoughts in the form of short threads.
 
 Core functionalities include:
-
+- MVVM design pattern for clean separation of concerns
 - Register & login users using Firebase Auth  
 - Add threads with text and image  
 - Follow/unfollow users and view live follower counts  
@@ -77,6 +77,7 @@ Core functionalities include:
 | Layer         | Tool                                                                 |
 |---------------|----------------------------------------------------------------------|
 | 🧱 UI         | Jetpack Compose, Material 3                                          |
+| 🧠 Architecture         |MVVM, ViewModel, StateFlow, mutableStateOf                              |
 | 🔥 Backend    | Firebase Auth, Firestore, Realtime Database                          |
 | 🧠 Logic      | ViewModel, LiveData, Kotlin                                           |
 | 📦 Caching    | SharedPreferences or DataStore                                       |
@@ -104,7 +105,7 @@ cd thread-app-clone
 
 ---
 
-## 📂 App Structure
+## 📂 App Structure(Modular MVVM)
 
 ```
 com.example.threadapp/
