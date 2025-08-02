@@ -1,7 +1,7 @@
 
 # 🧵 CHATTERBOX
 
-A full-stack Threads-like **social media app** built with **Jetpack Compose** and **Firebase**. Users can register, login, post threads with images, follow/unfollow others, and receive real-time notifications. The app also includes a filtered search system and personalized profiles.
+**A full-stack Threads-like **social media app** built with **Jetpack Compose** and **Firebase**. Users can register, login, post threads with images, follow/unfollow others, and receive real-time notifications. The app also includes a filtered search system and personalized profiles.**
 
 ---
 
@@ -9,12 +9,21 @@ A full-stack Threads-like **social media app** built with **Jetpack Compose** an
 
 Want to give it a spin? Just follow these steps:
 
-1. **Download** the ZIP file from [Google Drive](http://drive.google.com/drive/folders/1jvw8ad8GltC672m2csMUoNpkePtmP3Jp)📦
-2. **Extract** it to get the file: `app-debug.apk`
-3. On your phone, **enable installation from unknown sources** (Settings > Privacy or Security)
-4. **Install the APK**
-5. Open the app, and **register or log in** — your choice 🎉
-6. Enjoy scrolling, searching, posting, and following! 🔥
+- [Download the ZIP](https://github.com/Saksham6395/chatterbox/raw/main/app-debug.apk.zip)  from GitHub Releases select “Save link as...” 📦
+
+- Extract it to get: app-debug.apk
+
+- On your Android phone:
+
+    - Go to Settings → Security/Privacy
+
+    - Enable Install from Unknown Sources
+
+- Install the APK
+
+- Open the app and compress or decompress — your choice 🎉
+
+Enjoy smooth file compression! 🔥
 
 ---
 
@@ -35,7 +44,7 @@ Want to give it a spin? Just follow these steps:
 ChatterBox is a modern social media app that brings a clean and minimalist experience for sharing thoughts in the form of short threads.
 
 Core functionalities include:
-
+- MVVM design pattern for clean separation of concerns
 - Register & login users using Firebase Auth  
 - Add threads with text and image  
 - Follow/unfollow users and view live follower counts  
@@ -68,6 +77,7 @@ Core functionalities include:
 | Layer         | Tool                                                                 |
 |---------------|----------------------------------------------------------------------|
 | 🧱 UI         | Jetpack Compose, Material 3                                          |
+| 🧠 Architecture         |MVVM, ViewModel, StateFlow, mutableStateOf                              |
 | 🔥 Backend    | Firebase Auth, Firestore, Realtime Database                          |
 | 🧠 Logic      | ViewModel, LiveData, Kotlin                                           |
 | 📦 Caching    | SharedPreferences or DataStore                                       |
@@ -95,7 +105,7 @@ cd thread-app-clone
 
 ---
 
-## 📂 App Structure
+## 📂 App Structure(Modular MVVM)
 
 ```
 com.example.threadapp/
