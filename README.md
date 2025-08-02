@@ -1,4 +1,3 @@
-
 # 🧵 CHATTERBOX
 
 **A full-stack Threads-like **social media app** built with **Jetpack Compose** and **Firebase**. Users can register, login, post threads with images, follow/unfollow others, and receive real-time notifications. The app also includes a filtered search system and personalized profiles.**
@@ -9,24 +8,19 @@
 
 Want to give it a spin? Just follow these steps:
 
-- [Download the ZIP](https://github.com/Saksham6395/chatterbox/raw/main/app-debug.apk.zip)  from GitHub Releases select “Save link as...” 📦
-
-- Extract it to get: app-debug.apk
+- [Download the ZIP](https://github.com/Saksham6395/chatterbox/raw/main/app-debug.apk.zip) from GitHub Releases — select “Save link as...” 📦  
+- Extract it to get: `app-debug.apk`
 
 - On your Android phone:
+  - Go to Settings → Security/Privacy
+  - Enable **Install from Unknown Sources**
 
-    - Go to Settings → Security/Privacy
+- Install the APK  
+- Open the app and post away 🎉
 
-    - Enable Install from Unknown Sources
-
-- Install the APK
-
-- Open the app and compress or decompress — your choice 🎉
-
-Enjoy smooth file compression! 🔥
+Enjoy smooth thread vibes! 🔥
 
 ---
-
 
 ## 📁 Table of Contents
 
@@ -51,6 +45,7 @@ Core functionalities include:
 - Real-time notifications for follow/unfollow events  
 - Search users by name or username  
 - View personal and other users' profiles with their threads  
+- **Image uploads are handled via [Cloudinary](https://cloudinary.com/), allowing efficient image storage and retrieval using secure URLs**
 
 ---
 
@@ -61,7 +56,7 @@ Core functionalities include:
 | 🔐 Authentication     | Register and login with Firebase Email/Password                             |
 | 🔃 Session Caching    | Persistent login using ViewModel + SharedPreferences                        |
 | 🧵 Post Threads       | Users can post text-based threads with optional images                      |
-| 🖼️ Image Picker       | Add thread images using Android media picker                                |
+| 🖼️ Cloudinary Uploads | Upload thread images to Cloudinary and fetch secure URLs                    |
 | 🔎 Search Users       | Real-time filtered search by name or username                               |
 | 👥 Follow System      | Follow/unfollow users; live follower/following count                        |
 | 🔔 Notifications      | Real-time notification for follow/unfollow events                           |
@@ -77,9 +72,9 @@ Core functionalities include:
 | Layer         | Tool                                                                 |
 |---------------|----------------------------------------------------------------------|
 | 🧱 UI         | Jetpack Compose, Material 3                                          |
-| 🧠 Architecture         |MVVM, ViewModel, StateFlow, mutableStateOf                              |
+| 🧠 Architecture | MVVM, ViewModel, StateFlow, mutableStateOf                         |
 | 🔥 Backend    | Firebase Auth, Firestore, Realtime Database                          |
-| 🧠 Logic      | ViewModel, LiveData, Kotlin                                           |
+| ☁️ Image Hosting | **Cloudinary** for image storage and secure delivery              |
 | 📦 Caching    | SharedPreferences or DataStore                                       |
 | 📷 Image Picker | Android MediaStore APIs                                            |
 | 🧪 Testing    | (Optional) JUnit, Espresso                                           |
